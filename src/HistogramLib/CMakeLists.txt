@@ -1,0 +1,38 @@
+﻿# -----------------------------------------------------------------------
+#    Copyright (C) 2023 whiskycompiler
+#
+#    This file is part of the subraster image histogram library.
+#
+#    This program is free software: you can redistribute it and/or
+#    modify it under the terms of the GNU General Public License
+#    as published by the Free Software Foundation, either version 3
+#    of the License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#    See the GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program. If not, see <https://www.gnu.org/licenses/>.
+# --------------------------------------------------------------------------
+cmake_minimum_required (VERSION 3.16)
+
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+# Add source to this project's executable.
+add_library (HistogramLib SHARED "HistogramLib.cpp" "HistogramLib.h")
+target_link_libraries( HistogramLib ${OpenCV_LIBS} )
+
+set_property(TARGET HistogramLib PROPERTY CXX_STANDARD 20)
+
+install(TARGETS HistogramLib DESTINATION lib)
+install(TARGETS HistogramLib DESTINATION bin)
+install(FILES HistogramLib.h DESTINATION include)
+
+if(${CMAKE_BUILD_TYPE} MATCHES "Release")
+	install(FILES ${OpenCV_DIR}/x64/vc15/bin/opencv_world460.dll DESTINATION bin)
+else()
+	install(FILES ${OpenCV_DIR}/x64/vc15/bin/opencv_world460d.dll DESTINATION bin)
+endif()
